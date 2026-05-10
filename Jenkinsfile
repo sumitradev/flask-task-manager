@@ -122,8 +122,10 @@ pipeline {
                     --name prometheus \
                     --network jenkins \
                     -p 9090:9090 \
-                    -v \${WORKSPACE}/prometheus.yml:/etc/prometheus/prometheus.yml \
-                    prom/prometheus:latest
+                    --volumes-from jenkins \
+                    -e PROMETHEUS_CONFIG=/var/jenkins_home/workspace/flask-task-manager/prometheus.yml \
+                    prom/prometheus:latest \
+                    --config.file=/var/jenkins_home/workspace/flask-task-manager/prometheus.yml
                 """
                 sh "docker stop grafana || true"
                 sh "docker rm grafana || true"
