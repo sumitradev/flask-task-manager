@@ -18,24 +18,30 @@ pipeline {
             }
         }
 
-        // Stage 2 - Test
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                sh """
-                    docker run --rm \
-                    -v ${WORKSPACE}:/app \
-                    -w /app \
-                    python:3.11-slim \
-                    bash -c 'pip install -r requirements.txt -q && pytest tests/ -v --cov=app --cov-report=xml'
-                """
-            }
-            post {
-                always {
-                    junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
-                }
+    stage('Test') {
+        steps {
+            echo 'Running tests...'
+
+            sh """
+                docker run --rm \
+                -v ${WORKSPACE}:/app \
+                -w /app \
+                python:3.11-slim \
+                sh -c "pip install -r requirements.txt pytest pytest-cov -q && \
+                    mkdir -p test-results && \
+                    pytest tests/ -v \
+                    --cov=app \
+                    --cov-report=xml \
+                    --junitxml=test-results/results.xml"
+            """
+        }
+
+        post {
+            always {
+                junit allowEmptyResults: true, testResults: 'test-results/results.xml'
             }
         }
+    }
 
         // Stage 3 - Code Quality
         stage('Code Quality') {
