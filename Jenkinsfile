@@ -27,7 +27,7 @@ pipeline {
                     -v ${WORKSPACE}:/app \
                     -w /app \
                     python:3.11-slim \
-                    bash -c 'pip install -r /requirements.txt -q && pytest tests/ -v --cov=app --cov-report=xml'
+                    bash -c 'pip install -r requirements.txt -q && pytest tests/ -v --cov=app --cov-report=xml'
                 """
             }
             post {
