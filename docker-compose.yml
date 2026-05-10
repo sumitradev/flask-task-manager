@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Staging environment
+  app-staging:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask-task-manager-staging
+    ports:
+      - "5001:5000"
+    environment:
+      - FLASK_ENV=staging
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Production environment
+  app-production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask-task-manager-production
+    ports:
+      - "5002:5000"
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Prometheus - Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
+
+  # Grafana - Dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: unless-stopped

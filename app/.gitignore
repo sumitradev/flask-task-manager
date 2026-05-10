@@ -1,0 +1,27 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Database
+instance/
+*.db
+
+# Environment variables
+.env
+
+# pytest cache
+.pytest_cache/
+
+# Coverage reports
+coverage.xml
+htmlcov/
+
+# VS Code
+.vscode/
+
+# SonarQube
+.sonar/
