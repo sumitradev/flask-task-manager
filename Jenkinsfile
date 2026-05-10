@@ -41,22 +41,14 @@ pipeline {
         stage('Code Quality') {
             steps {
                 echo 'Running SonarQube analysis...'
-                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                    sh """
-                        docker run --rm \
-                        --network jenkins \
-                        --volumes-from jenkins \
-                        -w /var/jenkins_home/workspace/flask-task-manager \
-                        sonarsource/sonar-scanner-cli \
-                        sonar-scanner \
-                        -Dsonar.projectKey=flask-task-manager \
-                        -Dsonar.sources=app \
-                        -Dsonar.tests=tests \
-                        -Dsonar.python.version=3.11 \
-                        -Dsonar.host.url=http://sonarqube:9000 \
-                        -Dsonar.token=${SONAR_TOKEN}
-                    """
-                }
+                sh """
+                    docker run --rm \
+                    --network jenkins \
+                    --volumes-from jenkins \
+                    -w /var/jenkins_home/workspace/flask-task-manager \
+                    sonarsource/sonar-scanner-cli \
+                    sonar-scanner
+                """
             }
         }
 
