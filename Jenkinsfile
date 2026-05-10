@@ -24,10 +24,10 @@ pipeline {
                 echo 'Running tests...'
                 sh """
                     docker run --rm \
-                    -v \${WORKSPACE}:/app \
+                    -v ${WORKSPACE}:/app \
                     -w /app \
                     python:3.11-slim \
-                    sh -c "pip install -r /app/requirements.txt -q && pytest tests/ -v --cov=app --cov-report=xml"
+                    bash -c 'pip install -r /app/requirements.txt -q && pytest tests/ -v --cov=app --cov-report=xml'
                 """
             }
             post {
