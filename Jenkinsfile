@@ -24,10 +24,10 @@ pipeline {
                 echo 'Running tests...'
                 sh """
                     docker run --rm \
-                    -v ${WORKSPACE}:/app \
-                    -w /app \
+                    --volumes-from jenkins \
+                    -w /var/jenkins_home/workspace/flask-task-manager \
                     python:3.11-slim \
-                    bash /app/run_tests.sh
+                    bash /var/jenkins_home/workspace/flask-task-manager/run_tests.sh
                 """
             }
             post {
