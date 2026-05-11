@@ -4,4 +4,4 @@ global:
 scrape_configs:
   - job_name: 'flask-task-manager'
     static_configs:
-      - targets: ['app-staging:5000']
+      - targets: ['flask-task-manager-staging:5000']
